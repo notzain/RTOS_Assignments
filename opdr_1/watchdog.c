@@ -25,15 +25,13 @@ void watchdog_init(void)
 
     WDTCSR |= (1<<WDCE) | (1<<WDE);
 
-    WDTCSR = 1<<WDIE| 0<<WDE | 1<<WDP3;
+    // Interrupt, reset, 4s
+    WDTCSR = 1<<WDIE | 1<<WDE | 1<<WDP3;
+
 
     sei();
 }
 
-void watchdog_reset(void)
-{
-
-}
 
 void watchdog_on_reset(wdt_on_reset reset)
 {

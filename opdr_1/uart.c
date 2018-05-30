@@ -10,9 +10,9 @@
 #include <avr/io.h>
 #include <util/setbaud.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "uart.h"
-
 
 void uart0_init(void) {
     UBRR0H = UBRRH_VALUE;
@@ -47,5 +47,26 @@ void uart0_putint(uint8_t const num) {
 char uart0_getch(void) {
     loop_until_bit_is_set(UCSR0A, RXC0);
     return UDR0;
+}
+
+char *uart0_getstr(void) {
+    static char buffer[32];
+
+    uint8_t idx = 0;
+    for (;;) {
+        char received = uart0_getch();
+
+        uart0_putch(received);
+
+        if (received == '\n') {
+            break;
+        }
+
+        buffer[idx++] = received;
+    }
+
+    buffer[idx] = '\0';
+
+    return &buffer[0];
 }
 

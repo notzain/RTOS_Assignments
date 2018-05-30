@@ -23,17 +23,17 @@ uint8_t ping_sensor_measure(void) {
 
     SENSOR_ECHO_DDR &= ~_BV(SENSOR_ECHO_PIN);
 
-    TCNT1 = 0;
+    TCNT3 = 0;
 
     loop_until_bit_is_set(SENSOR_ECHO_PIN_REG, SENSOR_ECHO_PIN);
     //while (~SENSOR_ECHO_PIN_REG & _BV(SENSOR_ECHO_PIN));
 
     //while (SENSOR_ECHO_PIN_REG & _BV(SENSOR_ECHO_PIN)) {
     while (bit_is_set(SENSOR_ECHO_PIN_REG, SENSOR_ECHO_PIN)) {
-        TCCR1B = _BV(CS11);
+        TCCR3B = _BV(CS31);
     }
 
-    TCCR1B = 0;
+    TCCR3B = 0;
 
-    return (TCNT1 / 116);
+    return (TCNT3 / 116);
 }
